@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Master Control - CECNIC</title>
+    <style>
+        :root { 
+            --primary: #1d4ed8; 
+            --bg: #f1f5f9; 
+            --text: #0f172a; 
+            --error: #ef4444; 
+            --success: #10b981;
+            --admin-color: #7c3aed; 
+        }
+        
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background: var(--bg); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text); 
+        }
+
+        .card { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+            width: 100%;
+            max-width: 500px; 
+            border: 1px solid #e2e8f0; 
+        }
+
+        h2 { margin: 0 0 10px 0; text-align: center; font-weight: 800; letter-spacing: -1px; }
+        p.subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 30px; }
+
+        label { 
+            font-size: 11px; 
+            font-weight: 800; 
+            color: #94a3b8; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input, select { 
+            width: 100%; 
+            padding: 12px 15px; 
+            margin-bottom: 20px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 12px; 
+            font-size: 15px;
+            transition: all 0.2s;
+            background: #f8fafc;
+        }
+
+        .input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.1); }
+
+        .btn { 
+            width: 100%; 
+            padding: 15px; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(29, 78, 216, 0.2); }
+
+        /* ZONA MASTER - OCULTA INICIALMENTE */
+        .master-section { 
+            margin-top: 30px; 
+            padding-top: 25px; 
+            border-top: 2px dashed #e2e8f0; 
+        }
+
+        .master-label { color: var(--admin-color); display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 15px; }
+
+        #masterFields { 
+            display: none; 
+            background: #f5f3ff; 
+            padding: 20px; 
+            border-radius: 16px; 
+            border: 1px solid #ddd6fe;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-master { background: var(--admin-color); }
+        .btn-master:hover { box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2); }
+
+        .status-msg { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border-radius: 12px; 
+            display: none; 
+            font-size: 14px; 
+            text-align: center; 
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Control de Usuarios</h2>
+    <p class="subtitle">Gestión de roles y estado de solvencia</p>
+    
+    <label>Correo Institucional</label>
+    <input type="email" id="email" class="input" placeholder="correo@cecnic.com">
+    
+    <label>Contraseña Temporal</label>
+    <input type="password" id="pass" class="input" placeholder="Mínimo 6 caracteres">
+    
+    <label>Rol Estándar</label>
+    <select id="role" class="input">
+        <option value="estudiante">Estudiante (Acceso a Cursos)</option>
+        <option value="maestro">Maestro (Gestor Académico)</option>
+    </select>
+
+    <label>Estado de Pago</label>
+    <select id="status" class="input">
+        <option value="activo">✅ SOLVENTE (Activo)</option>
+        <option value="bloqueado">❌ INSOLVENTE (Bloqueado)</option>
+    </select>
+
+    <button class="btn" id="btnSave">Guardar Usuario</button>
+
+    <div class="master-section">
+        <div class="master-label">
+            <strong>🛡️ AUTORIZACIÓN GERENCIAL</strong>
+        </div>
+        <input type="password" id="masterKey" class="input" style="margin-bottom: 10px;" placeholder="Escriba clave para roles Admin/Gerencia">
+        
+        <div id="masterFields">
+            <label style="color: var(--admin-color);">Asignar Rango Superior</label>
+            <select id="specialRole" class="input" style="border-color: #ddd6fe;">
+                <option value="administrador">ADMINISTRADOR (Control de Sistema)</option>
+                <option value="gerencia">GERENCIA (Supervisión General)</option>
+            </select>
+            <button class="btn btn-master" id="btnSaveMaster">Asignar Alta Jerarquía</button>
+        </div>
+    </div>
+
+    <div id="msg" class="status-msg"></div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCygD9ISTn-mqAt5WacS1aIAVb1TunoG00",
+        authDomain: "plataformacecnic.firebaseapp.com",
+        projectId: "plataformacecnic"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // --- CONFIGURACIÓN DE SEGURIDAD ---
+    const MASTER_TOKEN = "CECNIC2024MASTER"; // <--- CAMBIA TU CLAVE AQUÍ
+
+    // Escuchar la clave en tiempo real
+    document.getElementById("masterKey").addEventListener("input", (e) => {
+        const fields = document.getElementById("masterFields");
+        fields.style.display = (e.target.value === MASTER_TOKEN) ? "block" : "none";
+    });
+
+    // --- PROCESO DE GUARDADO ---
+    async function ejecutarRegistro(esRangoAlto) {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("pass").value;
+        const status = document.getElementById("status").value;
+        const msg = document.getElementById("msg");
+        
+        // Seleccionamos el rol basado en qué botón se presionó
+        const rolFinal = esRangoAlto 
+            ? document.getElementById("specialRole").value 
+            : document.getElementById("role").value;
+
+        if(!email || !password) {
+            alert("Por favor completa los campos de correo y contraseña.");
+            return;
+        }
+
+        try {
+            // 1. Intentar crear en Authentication
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+            } catch (err) {
+                console.log("Aviso: El usuario ya existe en Auth o hubo un error menor.");
+            }
+            
+            // 2. Escribir o actualizar permisos en Firestore
+            await setDoc(doc(db, "users_config", email.toLowerCase()), {
+                email: email.toLowerCase(),
+                role: rolFinal,
+                status: status,
+                ultimaModificacion: new Date().toISOString()
+            });
+
+            // UI Éxito
+            msg.style.display = "block";
+            msg.style.background = "#dcfce7";
+            msg.style.color = "#166534";
+            msg.textContent = `CONFIGURADO: ${email} ahora es ${rolFinal.toUpperCase()}`;
+            
+            // Reset de campos master
+            document.getElementById("masterKey").value = "";
+            document.getElementById("masterFields").style.display = "none";
+            
+        } catch (err) {
+            msg.style.display = "block";
+            msg.style.background = "#fee2e2";
+            msg.style.color = "#991b1b";
+            msg.textContent = "Error de Sistema: " + err.message;
+        }
+    }
+
+    document.getElementById("btnSave").onclick = () => ejecutarRegistro(false);
+    document.getElementById("btnSaveMaster").onclick = () => ejecutarRegistro(true);
+
+</script>
+</body>
+</html>
