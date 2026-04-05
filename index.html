@@ -1,271 +1,233 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<title>Plataforma Estudiantil · Login</title>
-<meta name="color-scheme" content="light">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Plataforma Estudiantil · Login</title>
+    <meta name="color-scheme" content="light">
 
-<style>
+    <style>
+        :root {
+            --azul: #1d4ed8;
+            --azul-oscuro: #0b1f4d;
+            --azul-medio: #2563eb;
+            --azul-suave: #dbeafe;
+            --azul-claro: #eff6ff;
+            --blanco: #ffffff;
+            --texto: #0f172a;
+            --muted: #5b6b85;
+            --borde: #bfdbfe;
+            --shadow: 0 24px 70px rgba(11, 31, 77, .16);
+            --shadow-soft: 0 12px 30px rgba(29, 78, 216, .10);
+            --ok: #16a34a;
+            --bad: #dc2626;
+            --focus: rgba(37, 99, 235, .18);
+            --radius: 28px;
+        }
 
-:root{
-  --azul:#1d4ed8;
-  --azul-oscuro:#0b1f4d;
-  --azul-medio:#2563eb;
-  --azul-suave:#dbeafe;
-  --azul-claro:#eff6ff;
-  --blanco:#ffffff;
-  --texto:#0f172a;
-  --muted:#5b6b85;
-  --borde:#bfdbfe;
-  --shadow:0 24px 70px rgba(11,31,77,.16);
-  --shadow-soft:0 12px 30px rgba(29,78,216,.10);
-  --ok:#16a34a;
-  --bad:#dc2626;
-  --focus:rgba(37,99,235,.18);
-  --radius:28px;
-}
+        * { box-sizing: border-box; }
+        html, body { min-height: 100%; }
 
-*{box-sizing:border-box}
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--texto);
+            background: 
+                radial-gradient(circle at top left, rgba(59, 130, 246, .16), transparent 25%),
+                radial-gradient(circle at top right, rgba(29, 78, 216, .14), transparent 28%),
+                linear-gradient(145deg, #eff6ff 0%, #dbeafe 45%, #eef4ff 100%);
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
 
-html,body{
-  min-height:100%;
-}
+        .bg-dots {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .22;
+            background-image: radial-gradient(circle, rgba(29, 78, 216, .35) 1.1px, transparent 1.1px);
+            background-size: 32px 32px;
+        }
 
-body{
-  margin:0;
-  font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Arial, sans-serif;
-  color:var(--texto);
+        .wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+        }
 
-  background:
-    radial-gradient(circle at top left, rgba(59,130,246,.16), transparent 25%),
-    radial-gradient(circle at top right, rgba(29,78,216,.14), transparent 28%),
-    linear-gradient(145deg, #eff6ff 0%, #dbeafe 45%, #eef4ff 100%);
+        .shell {
+            width: min(1280px, 100%);
+            background: rgba(255, 255, 255, .62);
+            border: 1px solid rgba(255, 255, 255, .72);
+            backdrop-filter: blur(10px);
+            border-radius: 34px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
 
-  overflow-x:hidden;
-  overflow-y:auto;
-}
+        .hero {
+            padding: 32px;
+            background: linear-gradient(135deg, #0b1f4d, #1d4ed8);
+            color: white;
+        }
 
-.bg-dots{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.22;
-  background-image: radial-gradient(circle, rgba(29,78,216,.35) 1.1px, transparent 1.1px);
-  background-size:32px 32px;
-}
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr .7fr;
+            gap: 26px;
+        }
 
-.wrap{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:22px;
-}
+        @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; } }
 
-.shell{
-  width:min(1280px,100%);
-  background:rgba(255,255,255,.62);
-  border:1px solid rgba(255,255,255,.72);
-  backdrop-filter: blur(10px);
-  border-radius:34px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
+        .hero-title { font-size: 56px; font-weight: 900; line-height: .95; }
+        .hero-sub { margin-top: 16px; font-size: 16px; opacity: .9; }
 
-/* HERO */
+        .hero-right {
+            background: rgba(255, 255, 255, .12);
+            border: 1px solid rgba(255, 255, 255, .2);
+            padding: 22px;
+            border-radius: 26px;
+        }
 
-.hero{
-  padding:32px;
-  background:linear-gradient(135deg,#0b1f4d,#1d4ed8);
-  color:white;
-}
+        .hero-course {
+            width: 100%;
+            padding: 16px;
+            border-radius: 18px;
+            border: none;
+            background: white;
+            font-size: 18px;
+        }
 
-.hero-grid{
-  display:grid;
-  grid-template-columns:1.2fr .7fr;
-  gap:26px;
-}
+        .hero-info {
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
 
-@media (max-width:980px){
-  .hero-grid{grid-template-columns:1fr}
-}
+        .hero-box {
+            padding: 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, .1);
+        }
 
-.hero-title{
-  font-size:56px;
-  font-weight:900;
-  line-height:.95;
-}
+        .hero-box strong { display: block; font-size: 18px; }
 
-.hero-sub{
-  margin-top:16px;
-  font-size:16px;
-  opacity:.9;
-}
+        .content {
+            padding: 26px;
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 20px;
+        }
 
-.hero-right{
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.2);
-  padding:22px;
-  border-radius:26px;
-}
+        @media (max-width: 980px) { .content { grid-template-columns: 1fr; } }
 
-.hero-course{
-  width:100%;
-  padding:16px;
-  border-radius:18px;
-  border:none;
-  background:white;
-  font-size:18px;
-}
+        .panel {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            border: 1px solid var(--borde);
+        }
 
-.hero-info{
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
+        .panel h2 { margin: 0; font-size: 32px; font-weight: 900; }
 
-.hero-box{
-  padding:16px;
-  border-radius:20px;
-  background:rgba(255,255,255,.1);
-}
+        .feature-grid {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
 
-.hero-box strong{
-  display:block;
-  font-size:18px;
-}
+        @media (max-width: 680px) { .feature-grid { grid-template-columns: 1fr; } }
 
-/* CONTENT */
+        .feature {
+            padding: 18px;
+            border-radius: 22px;
+            background: linear-gradient(180deg, #fff, #f6faff);
+            border: 1px solid var(--borde);
+        }
 
-.content{
-  padding:26px;
-  display:grid;
-  grid-template-columns:1fr 420px;
-  gap:20px;
-}
+        .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #1d4ed8, #0b1f4d);
+            color: white;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
 
-@media (max-width:980px){
-  .content{grid-template-columns:1fr}
-}
+        .login-card {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            border: 1px solid var(--borde);
+        }
 
-.panel{
-  background:white;
-  border-radius:28px;
-  padding:24px;
-  border:1px solid var(--borde);
-}
+        .login-title { font-size: 28px; font-weight: 900; }
+        .field { margin-top: 14px; }
+        .field label { font-size: 12px; font-weight: 900; }
 
-.panel h2{
-  margin:0;
-  font-size:32px;
-  font-weight:900;
-}
+        .input {
+            width: 100%;
+            margin-top: 6px;
+            padding: 14px;
+            border-radius: 16px;
+            border: 1px solid var(--borde);
+        }
 
-.feature-grid{
-  margin-top:18px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-}
+        .input:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 4px var(--focus);
+            outline: none;
+        }
 
-@media (max-width:680px){
-  .feature-grid{grid-template-columns:1fr}
-}
+        .login-row {
+            margin-top: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
 
-.feature{
-  padding:18px;
-  border-radius:22px;
-  background:linear-gradient(180deg,#fff,#f6faff);
-  border:1px solid var(--borde);
-}
+        .btn {
+            border: none;
+            padding: 14px 18px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #1d4ed8, #0b1f4d);
+            color: white;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
 
-.icon{
-  width:50px;
-  height:50px;
-  border-radius:16px;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(135deg,#1d4ed8,#0b1f4d);
-  color:white;
-  font-size:20px;
-  margin-bottom:10px;
-}
+        .btn:active { transform: scale(0.95); }
 
-/* LOGIN */
+        .chip {
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: white;
+            border: 1px solid var(--borde);
+            font-weight: 900;
+            font-size: 12px;
+        }
 
-.login-card{
-  background:white;
-  border-radius:28px;
-  padding:24px;
-  border:1px solid var(--borde);
-}
+        .msg {
+            margin-top: 14px;
+            font-weight: 700;
+            min-height: 1.2em;
+        }
 
-.login-title{
-  font-size:28px;
-  font-weight:900;
-}
+        .msg.good { color: var(--ok); }
+        .msg.bad { color: var(--bad); }
 
-.field{
-  margin-top:14px;
-}
-
-.field label{
-  font-size:12px;
-  font-weight:900;
-}
-
-.input{
-  width:100%;
-  margin-top:6px;
-  padding:14px;
-  border-radius:16px;
-  border:1px solid var(--borde);
-}
-
-.input:focus{
-  border-color:#60a5fa;
-  box-shadow:0 0 0 4px var(--focus);
-  outline:none;
-}
-
-.login-row{
-  margin-top:18px;
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:10px;
-}
-
-.btn{
-  border:none;
-  padding:14px 18px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#1d4ed8,#0b1f4d);
-  color:white;
-  font-weight:900;
-  cursor:pointer;
-}
-
-.chip{
-  padding:6px 12px;
-  border-radius:999px;
-  background:white;
-  border:1px solid var(--borde);
-  font-weight:900;
-}
-
-.msg{
-  margin-top:14px;
-  font-weight:700;
-}
-
-.msg.good{color:var(--ok)}
-.msg.bad{color:var(--bad)}
-
-</style>
+    </style>
 </head>
 
 <body>
@@ -273,166 +235,171 @@ body{
 <div class="bg-dots"></div>
 
 <div class="wrap">
+    <div class="shell">
+        <section class="hero">
+            <div class="hero-grid">
+                <div>
+                    <h1 class="hero-title">PLATAFORMA<br>ESTUDIANTIL</h1>
+                    <p class="hero-sub">Acceso a cursos, avisos, documentos y recursos del centro.</p>
+                </div>
+                <div class="hero-right">
+                    <div>Bienvenido</div>
+                    <input class="hero-course" value="Acceso al sistema" readonly>
+                    <div class="hero-info">
+                        <div class="hero-box">
+                            <small>Fecha</small>
+                            <strong id="currentDate">--/--/--</strong>
+                        </div>
+                        <div class="hero-box">
+                            <small>Usuarios</small>
+                            <strong id="usersCountHero">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<div class="shell">
+        <section class="content">
+            <div class="panel">
+                <h2>Bienvenidos</h2>
+                <div class="feature-grid">
+                    <div class="feature">
+                        <div class="icon">📘</div>
+                        <strong>Cursos</strong>
+                        <span>Materiales y recursos del curso.</span>
+                    </div>
+                    <div class="feature">
+                        <div class="icon">📢</div>
+                        <strong>Avisos</strong>
+                        <span>Información importante del centro.</span>
+                    </div>
+                    <div class="feature">
+                        <div class="icon">🧾</div>
+                        <strong>Documentos</strong>
+                        <span>Acceso a contenidos y archivos.</span>
+                    </div>
+                </div>
+            </div>
 
-<section class="hero">
-
-<div class="hero-grid">
-
-<div>
-
-<h1 class="hero-title">PLATAFORMA<br>ESTUDIANTIL</h1>
-
-<p class="hero-sub">
-Acceso a cursos, avisos, documentos y recursos del centro.
-</p>
-
+            <div class="login-card">
+                <h1 class="login-title">Iniciar sesión</h1>
+                <div class="field">
+                    <label>CORREO ELECTRÓNICO</label>
+                    <input id="email" class="input" type="email" placeholder="ejemplo@correo.com">
+                </div>
+                <div class="field">
+                    <label>CONTRASEÑA</label>
+                    <input id="pass" class="input" type="password" placeholder="••••••••">
+                </div>
+                <div class="login-row">
+                    <button id="loginBtn" class="btn">ENTRAR AL SISTEMA</button>
+                    <div>
+                        <span class="chip" id="statusChip">Cargando...</span>
+                    </div>
+                </div>
+                <div id="msg" class="msg"></div>
+            </div>
+        </section>
+    </div>
 </div>
 
-<div class="hero-right">
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-<div>Bienvenido</div>
+    // --- CONFIGURACIÓN DE TU FIREBASE ---
+    // SUSTITUYE ESTOS DATOS CON LOS DE TU PROYECTO EN LA CONSOLA DE FIREBASE
+    const firebaseConfig = {
+  apiKey: "AIzaSyCygD9ISTn-mqAt5WacS1aIAVb1TunoG00",
+  authDomain: "plataformacecnic.firebaseapp.com",
+  projectId: "plataformacecnic",
+  storageBucket: "plataformacecnic.firebasestorage.app",
+  messagingSenderId: "1053875195363",
+  appId: "1:1053875195363:web:57be5f3ff586466ea7a4d6"
+};
 
-<input class="hero-course" value="Bienvenido al login">
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const usersRef = collection(db, "usuarios");
 
-<div class="hero-info">
+    const $ = (id) => document.getElementById(id);
 
-<div class="hero-box">
-<small>Fecha</small>
-<strong id="currentDate"></strong>
-</div>
+    // Formatear Fecha
+    $("currentDate").textContent = new Date().toLocaleDateString("es-NI", {
+        day: "numeric", 
+        month: "long", 
+        year: "numeric"
+    });
 
-<div class="hero-box">
-<small>Usuarios</small>
-<strong id="usersCountHero">0</strong>
-</div>
+    // Boot: Cargar estadísticas iniciales
+    async function boot() {
+        try {
+            const snapshot = await getCountFromServer(usersRef);
+            $("usersCountHero").textContent = snapshot.data().count;
+            $("statusChip").textContent = "Online";
+        } catch (error) {
+            console.error("Error al conectar:", error);
+            $("statusChip").textContent = "Offline";
+        }
+    }
 
-</div>
+    // Función de Login
+    async function login() {
+        const email = $("email").value.trim().toLowerCase();
+        const pass = $("pass").value;
+        const msg = $("msg");
 
-</div>
+        if (!email || !pass) {
+            msg.textContent = "Por favor, completa todos los campos.";
+            msg.className = "msg bad";
+            return;
+        }
 
-</div>
+        msg.textContent = "Verificando identidad...";
+        msg.className = "msg";
+        $("loginBtn").disabled = true;
 
-</section>
+        try {
+            // Buscamos al usuario en la colección "usuarios" que coincida con email y pass
+            const q = query(usersRef, where("email", "==", email), where("pass", "==", pass));
+            const querySnapshot = await getDocs(q);
 
-<section class="content">
+            if (querySnapshot.empty) {
+                msg.textContent = "Credenciales incorrectas.";
+                msg.className = "msg bad";
+                $("loginBtn").disabled = false;
+                return;
+            }
 
-<div class="panel">
+            // Si existe, obtenemos sus datos
+            const userDoc = querySnapshot.docs[0].data();
 
-<h2>Bienvenidos</h2>
+            // Guardar sesión localmente
+            localStorage.setItem("session_email", userDoc.email);
+            localStorage.setItem("session_role", userDoc.role); // 'gerencia', 'admin', 'maestro', 'alumno'
+            localStorage.setItem("session_name", userDoc.nombre || "Usuario");
 
-<div class="feature-grid">
+            msg.textContent = "¡Acceso concedido!";
+            msg.className = "msg good";
 
-<div class="feature">
-<div class="icon">📘</div>
-<strong>Cursos</strong>
-<span>Materiales y recursos del curso.</span>
-</div>
+            // Redirección con pequeña pausa para que se vea el mensaje
+            setTimeout(() => {
+                location.href = "dashboard.html";
+            }, 800);
 
-<div class="feature">
-<div class="icon">📢</div>
-<strong>Avisos</strong>
-<span>Información importante del centro.</span>
-</div>
+        } catch (error) {
+            console.error(error);
+            msg.textContent = "Error de conexión con la base de datos.";
+            msg.className = "msg bad";
+            $("loginBtn").disabled = false;
+        }
+    }
 
-<div class="feature">
-<div class="icon">🧾</div>
-<strong>Documentos</strong>
-<span>Acceso a contenidos y archivos.</span>
-</div>
-
-</div>
-
-</div>
-
-<div class="login-card">
-
-<h1 class="login-title">Iniciar sesión</h1>
-
-<div class="field">
-<label>CORREO</label>
-<input id="email" class="input">
-</div>
-
-<div class="field">
-<label>CONTRASEÑA</label>
-<input id="pass" class="input" type="password">
-</div>
-
-<div class="login-row">
-
-<button id="loginBtn" class="btn">Entrar</button>
-
-<div>
-<span class="chip" id="statusChip">Cargando...</span>
-<span id="usersInfo"></span>
-</div>
-
-</div>
-
-<div id="msg" class="msg"></div>
-
-</div>
-
-</section>
-
-</div>
-
-</div>
-
-<script>
-
-const $ = (id)=>document.getElementById(id);
-
-function formatDate(){
-return new Date().toLocaleDateString("es-NI",{day:"numeric",month:"long",year:"numeric"});
-}
-
-$("currentDate").textContent=formatDate();
-
-async function loadUsers(){
-const r=await fetch("apartado.json",{cache:"no-store"});
-const d=await r.json();
-return d.users||[];
-}
-
-async function boot(){
-try{
-const users=await loadUsers();
-$("statusChip").textContent="Online";
-$("usersInfo").textContent=`Usuarios cargados: ${users.length}`;
-$("usersCountHero").textContent=users.length;
-}catch{
-$("statusChip").textContent="Offline";
-}
-}
-
-async function login(){
-
-const email=$("email").value.trim().toLowerCase();
-const pass=$("pass").value;
-
-const users=await loadUsers();
-
-const u=users.find(x=>x.email.toLowerCase()==email && x.pass==pass);
-
-if(!u){
-$("msg").textContent="Credenciales incorrectas";
-$("msg").className="msg bad";
-return;
-}
-
-localStorage.setItem("session_email",email);
-localStorage.setItem("session_role",u.role||"estudiante");
-
-location.href="dashboard.html";
-
-}
-
-$("loginBtn").onclick=login;
-
-boot();
+    $("loginBtn").onclick = login;
+    
+    // Ejecutar carga inicial
+    boot();
 
 </script>
 
