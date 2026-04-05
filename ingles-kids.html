@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<title>Curso Inglés Kids</title>
+<meta name="color-scheme" content="light">
+<style>
+:root{
+  --azul:#1d4ed8;
+  --azul-oscuro:#0b1f4d;
+  --azul-suave:#dbeafe;
+  --blanco:#ffffff;
+  --borde:#bfdbfe;
+  --texto:#0f172a;
+  --muted:#60708e;
+  --success:#16a34a;
+  --danger:#dc2626;
+  --shadow:0 20px 60px rgba(11,31,77,.18);
+}
+
+*{box-sizing:border-box}
+html,body{min-height:100%}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui,sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(59,130,246,.18), transparent 25%),
+    radial-gradient(circle at top right, rgba(29,78,216,.18), transparent 28%),
+    linear-gradient(145deg, #eff6ff 0%, #dbeafe 45%, #eef4ff 100%);
+  color:var(--texto);
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+
+.wrap{
+  max-width:1280px;
+  margin:0 auto;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  min-height:100vh;
+}
+
+.glass{
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.6);
+  box-shadow:var(--shadow);
+}
+
+.panel-title{
+  background:linear-gradient(90deg, var(--azul-oscuro), var(--azul));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.top{
+  position:relative;
+  overflow:hidden;
+  border-radius:30px;
+  padding:26px;
+  background:linear-gradient(135deg, #0b1f4d 0%, #163b8e 55%, #1d4ed8 100%);
+  color:#fff;
+}
+.top::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.20;
+  background-image: radial-gradient(circle at 20% 20%, white 1px, transparent 1px);
+  background-size:26px 26px;
+}
+.top-inner{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.roundBack{
+  width:46px;
+  height:46px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.20);
+  cursor:pointer;
+  font-weight:900;
+  font-size:18px;
+  transition:transform .15s ease;
+}
+.roundBack:hover{transform:translateY(-2px)}
+
+.title b{
+  display:block;
+  font-size:32px;
+  font-weight:1000;
+  letter-spacing:-.03em;
+}
+.title span{
+  display:block;
+  color:rgba(255,255,255,.85);
+  font-size:14px;
+  margin-top:8px;
+}
+
+.btn{
+  border:none;
+  cursor:pointer;
+  padding:12px 14px;
+  border-radius:16px;
+  font-weight:900;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+
+.btn{
+  background:linear-gradient(135deg, #1d4ed8, #0b1f4d);
+  color:#fff;
+  box-shadow:0 18px 38px rgba(29,78,216,.20);
+}
+.btn.ghost{
+  background:#fff;
+  color:#264578;
+  border:1px solid var(--borde);
+  box-shadow:0 8px 18px rgba(37,99,235,.07);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  align-items:start;
+}
+
+.panel{
+  border-radius:28px;
+  overflow:hidden;
+}
+
+.head{
+  padding:16px 18px;
+  border-bottom:1px solid rgba(191,219,254,.8);
+  background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(239,246,255,.75));
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.head b{
+  font-size:26px;
+  font-weight:1000;
+  letter-spacing:-.03em;
+}
+.head span{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+}
+
+.body{
+  padding:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,.30), rgba(255,255,255,.15));
+}
+
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.card{
+  padding:16px;
+  border-radius:24px;
+  border:1px solid var(--borde);
+  background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(239,246,255,.95));
+  box-shadow:0 12px 28px rgba(37,99,235,.08);
+  cursor:pointer;
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 20px 34px rgba(37,99,235,.11);
+}
+.card b{
+  display:block;
+  font-size:16px;
+  font-weight:900;
+  color:var(--azul-oscuro);
+}
+.card span{
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.status{
+  font-size:13px;
+  color:var(--muted);
+  min-height:18px;
+  margin-top:12px;
+  font-weight:700;
+}
+.status.ok{color:var(--success)}
+.status.bad{color:var(--danger)}
+
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  place-items:center;
+  background:rgba(15,23,42,.42);
+  backdrop-filter:blur(8px);
+  padding:18px;
+  z-index:50;
+}
+.modal.show{display:grid}
+
+.paper{
+  width:min(980px, 100%);
+  max-height:86vh;
+  overflow:auto;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.7);
+  background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(239,246,255,.96));
+  box-shadow:0 30px 90px rgba(11,31,77,.22);
+}
+
+.paperTop{
+  position:sticky;
+  top:0;
+  padding:14px 16px;
+  background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(239,246,255,.95));
+  border-bottom:1px solid var(--borde);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  z-index:2;
+}
+.paperTop b{
+  color:var(--azul-oscuro);
+  font-size:18px;
+}
+
+.paperBody{
+  padding:20px;
+  white-space:pre-wrap;
+  line-height:1.65;
+  color:var(--texto);
+}
+
+.input,.area{
+  width:100%;
+  padding:14px 16px;
+  border-radius:18px;
+  border:1px solid var(--borde);
+  background:#fff;
+  color:var(--texto);
+  outline:none;
+  transition:border-color .18s ease, box-shadow .18s ease;
+  font-size:15px;
+}
+.input:focus,.area:focus{
+  border-color:#60a5fa;
+  box-shadow:0 0 0 5px rgba(37,99,235,.18);
+}
+.area{
+  min-height:160px;
+  resize:vertical;
+}
+
+.sep{
+  height:1px;
+  background:rgba(191,219,254,.9);
+  margin:18px 0;
+}
+
+.comment{
+  padding:12px 14px;
+  border-radius:18px;
+  border:1px solid var(--borde);
+  background:#fff;
+  box-shadow:0 8px 20px rgba(37,99,235,.06);
+}
+.comment b{
+  display:block;
+  font-size:13px;
+  color:var(--azul-oscuro);
+}
+.comment span{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin-top:8px;
+  white-space:pre-wrap;
+  line-height:1.5;
+}
+
+@media (max-width:980px){
+  .grid{grid-template-columns:1fr}
+  .top-inner{flex-direction:column}
+  .title b{font-size:28px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top glass">
+    <div class="top-inner">
+      <div class="row">
+        <div class="roundBack" id="back" title="Dashboard">←</div>
+        <div class="title">
+          <b id="courseName">Curso</b>
+          <span id="courseMeta">—</span>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn" id="newAnn" style="display:none">+ Aviso</button>
+        <button class="btn" id="newAct" style="display:none">+ Actividad</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <section class="panel glass">
+      <div class="head">
+        <b class="panel-title">Avisos</b>
+        <span id="annCount">—</span>
+      </div>
+      <div class="body">
+        <div class="list" id="annList"></div>
+        <div class="status" id="annStatus"></div>
+      </div>
+    </section>
+
+    <section class="panel glass">
+      <div class="head">
+        <b class="panel-title">Actividades</b>
+        <span id="actCount">—</span>
+      </div>
+      <div class="body">
+        <div class="list" id="actList"></div>
+        <div class="status" id="actStatus"></div>
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<div class="modal" id="viewM">
+  <div class="paper">
+    <div class="paperTop">
+      <b id="vTitle">—</b>
+      <div class="row">
+        <button class="btn ghost" id="vClose">Cerrar</button>
+      </div>
+    </div>
+    <div class="paperBody">
+      <div id="vBody"></div>
+
+      <div id="forumArea" style="display:none">
+        <div class="sep"></div>
+        <b style="display:block;margin-bottom:10px;color:#0b1f4d">Comentarios</b>
+        <div id="cList" style="display:grid;gap:12px"></div>
+
+        <div class="sep"></div>
+        <textarea class="area" id="cText" placeholder="Escribí un comentario..."></textarea>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" id="cSend">Comentar</button>
+          <div class="status" id="cStatus"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="annM">
+  <div class="paper">
+    <div class="paperTop">
+      <b>Nuevo aviso</b>
+      <div class="row">
+        <button class="btn ghost" id="annCancel">Cancelar</button>
+        <button class="btn" id="annSave">Guardar</button>
+      </div>
+    </div>
+    <div class="paperBody">
+      <input class="input" id="annTitle" placeholder="Título">
+      <div style="height:12px"></div>
+      <textarea class="area" id="annBody" placeholder="Descripción..."></textarea>
+      <div class="status" id="annSaveStatus"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="actM">
+  <div class="paper">
+    <div class="paperTop">
+      <b>Nueva actividad</b>
+      <div class="row">
+        <button class="btn ghost" id="actCancel">Cancelar</button>
+        <button class="btn" id="actSave">Guardar</button>
+      </div>
+    </div>
+    <div class="paperBody">
+      <input class="input" id="actTitle" placeholder="Título">
+      <div style="height:12px"></div>
+      <textarea class="area" id="actBody" placeholder="Descripción completa..."></textarea>
+      <div class="status" id="actSaveStatus"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  const $ = (id)=>document.getElementById(id);
+  const email = (localStorage.getItem("session_email") || "").toLowerCase();
+  const role  = localStorage.getItem("session_role") || "estudiante";
+  const name  = localStorage.getItem("session_name") || email;
+  if(!email) location.href="../index.html";
+  $("back").onclick=()=>location.href="../dashboard.html";
+
+  const canTeacher = ()=> role==="maestro" || role==="administrador";
+
+  const params = new URLSearchParams(location.search);
+  const courseId = params.get("course");
+  if(!courseId){ location.href="../dashboard.html"; }
+
+  function esc(s){ return String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
+
+  async function loadCourses(){
+    const r = await fetch("../courses.json?v="+Date.now(),{cache:"no-store"});
+    if(!r.ok) throw new Error("courses.json");
+    return (await r.json()).courses || [];
+  }
+
+  const courses = await loadCourses();
+  const course = courses.find(c=>c.id===courseId);
+  if(!course){ alert("Curso no registrado"); location.href="../dashboard.html"; }
+
+  document.title = course.name;
+  $("courseName").textContent = course.name;
+  $("courseMeta").textContent = email + " · " + role;
+
+  const allowed = (course.allowedEmails||[]).map(x=>String(x).toLowerCase());
+  if(!(canTeacher() || allowed.includes(email))){
+    alert("Sin permiso");
+    location.href="../dashboard.html";
+  }
+
+  $("newAnn").style.display = canTeacher() ? "inline-block" : "none";
+  $("newAct").style.display = canTeacher() ? "inline-block" : "none";
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, doc,
+    query, orderBy, onSnapshot, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCygD9ISTn-mqAt5WacS1aIAVb1TunoG00",
+    authDomain: "plataformacecnic.firebaseapp.com",
+    projectId: "plataformacecnic",
+    storageBucket: "plataformacecnic.firebasestorage.app",
+    messagingSenderId: "1053875195363",
+    appId: "1:1053875195363:web:57be5f3ff586466ea7a4d6"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  const annRef = collection(db,"courses",courseId,"announcements");
+  const actRef = collection(db,"courses",courseId,"activities");
+
+  const show=(m)=>m.classList.add("show");
+  const hide=(m)=>m.classList.remove("show");
+
+  const viewM=$("viewM"), annM=$("annM"), actM=$("actM");
+
+  $("vClose").onclick=()=>{ hide(viewM); $("forumArea").style.display="none"; };
+  $("annCancel").onclick=()=>hide(annM);
+  $("actCancel").onclick=()=>hide(actM);
+
+  let anns=[];
+  function setAnnStatus(t){ $("annStatus").textContent=t||""; }
+  function renderAnns(){
+    const wrap=$("annList"); wrap.innerHTML="";
+    anns.forEach(a=>{
+      const div=document.createElement("div");
+      div.className="card";
+      div.innerHTML=`<b>${esc(a.title||"Aviso")}</b><span>${esc(a.body||"")}</span>`;
+      div.onclick=()=>{
+        $("vTitle").textContent=a.title||"Aviso";
+        $("vBody").textContent=a.body||"";
+        $("forumArea").style.display="none";
+        show(viewM);
+      };
+      wrap.appendChild(div);
+    });
+    $("annCount").textContent = anns.length ? anns.length+" aviso(s)" : "—";
+    setAnnStatus(anns.length ? "" : "Avisos y novedades generales");
+  }
+
+  onSnapshot(query(annRef, orderBy("createdAt","desc")),(snap)=>{
+    anns=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderAnns();
+  });
+
+  let acts=[];
+  function setActStatus(t){ $("actStatus").textContent=t||""; }
+  function renderActs(){
+    const wrap=$("actList"); wrap.innerHTML="";
+    acts.forEach(a=>{
+      const div=document.createElement("div");
+      div.className="card";
+      div.innerHTML=`<b>${esc(a.title||"Actividad")}</b><span>${esc(a.body||"")}</span>`;
+      div.onclick=()=>openActivity(a);
+      wrap.appendChild(div);
+    });
+    $("actCount").textContent = acts.length ? acts.length+" actividad(es)" : "—";
+    setActStatus(acts.length ? "" : "No hay actividades todavía");
+  }
+
+  onSnapshot(query(actRef, orderBy("createdAt","desc")),(snap)=>{
+    acts=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderActs();
+  });
+
+  $("newAnn").onclick=()=>{
+    $("annTitle").value=""; $("annBody").value="";
+    $("annSaveStatus").textContent="";
+    show(annM);
+  };
+  $("annSave").onclick=async()=>{
+    const title=$("annTitle").value.trim();
+    const body=$("annBody").value.trim();
+    if(!title||!body){ $("annSaveStatus").textContent="Falta título o texto"; return; }
+    $("annSaveStatus").textContent="Guardando...";
+    await addDoc(annRef,{ title, body, authorEmail: email, authorName: name, authorRole: role, createdAt: serverTimestamp() });
+    hide(annM);
+  };
+
+  $("newAct").onclick=()=>{
+    $("actTitle").value=""; $("actBody").value="";
+    $("actSaveStatus").textContent="";
+    show(actM);
+  };
+  $("actSave").onclick=async()=>{
+    const title=$("actTitle").value.trim();
+    const body=$("actBody").value.trim();
+    if(!title||!body){ $("actSaveStatus").textContent="Falta título o texto"; return; }
+    $("actSaveStatus").textContent="Guardando...";
+    await addDoc(actRef,{ title, body, authorEmail: email, authorName: name, authorRole: role, createdAt: serverTimestamp() });
+    hide(actM);
+  };
+
+  let unsubscribeComments=null;
+  async function openActivity(a){
+    $("vTitle").textContent=a.title||"Actividad";
+    $("vBody").textContent=a.body||"";
+    $("forumArea").style.display="block";
+    $("cText").value="";
+    $("cStatus").textContent="";
+    show(viewM);
+
+    if(unsubscribeComments) unsubscribeComments();
+
+    const cRef = collection(db,"courses",courseId,"activities",a.id,"comments");
+    const cq = query(cRef, orderBy("createdAt","asc"));
+    unsubscribeComments = onSnapshot(cq,(snap)=>{
+      const list=$("cList"); list.innerHTML="";
+      snap.forEach(d=>{
+        const c=d.data();
+        const div=document.createElement("div");
+        div.className="comment";
+        div.innerHTML=`<b>${esc(c.authorName||c.authorEmail||"Usuario")}</b><span>${esc(c.text||"")}</span>`;
+        list.appendChild(div);
+      });
+    });
+
+    $("cSend").onclick = async ()=>{
+      const text=$("cText").value.trim();
+      if(!text){ $("cStatus").textContent="Escribe algo"; return; }
+      $("cStatus").textContent="Enviando...";
+      await addDoc(cRef,{
+        text,
+        authorEmail: email,
+        authorName: name,
+        authorRole: role,
+        createdAt: serverTimestamp()
+      });
+      $("cText").value="";
+      $("cStatus").textContent="";
+    };
+  }
+</script>
+</body>
+</html>
