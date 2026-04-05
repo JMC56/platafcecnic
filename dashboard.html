@@ -407,156 +407,194 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc, deleteDoc, where } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-    import { getAuth, createUserWithEmailAndPassword, updatePassword, reauthenticateWithCredential, EmailAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+<script type="module">
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCygD9ISTn-mqAt5WacS1aIAVb1TunoG00",
-      authDomain: "plataformacecnic.firebaseapp.com",
-      projectId: "plataformacecnic",
-      storageBucket: "plataformacecnic.firebasestorage.app",
-      messagingSenderId: "1053875195363",
-      appId: "1:1053875195363:web:57be5f3ff586466ea7a4d6"
-    };
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, updatePassword, reauthenticateWithCredential, EmailAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
+const firebaseConfig = {
+  apiKey: "AIzaSyCygD9ISTn-mqAt5WacS1aIAVb1TunoG00",
+  authDomain: "plataformacecnic.firebaseapp.com",
+  projectId: "plataformacecnic",
+  storageBucket: "plataformacecnic.firebasestorage.app",
+  messagingSenderId: "1053875195363",
+  appId: "1:1053875195363:web:57be5f3ff586466ea7a4d6"
+};
 
-    // --- VARIABLES DE SESIÓN ---
-    const userEmail = (localStorage.getItem("session_email") || "").toLowerCase();
-    const userRole = localStorage.getItem("session_role") || "estudiante";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-    if(!userEmail) window.location.href = "index.html";
+const $ = id => document.getElementById(id);
 
-    // --- FUNCIONES DE UI ---
-    window.openModal = (id) => document.getElementById(id).classList.add('active');
-    window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+/* =========================
+   🔐 CONTROL DE SESIÓN REAL
+========================= */
+onAuthStateChanged(auth, async (user) => {
 
-    document.getElementById("uNameDisplay").textContent = userEmail.split('@')[0].toUpperCase();
-    document.getElementById("uRoleDisplay").textContent = "ROL: " + userRole.toUpperCase();
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
 
-    if(userRole === "administrador" || userRole === "maestro") {
-      document.getElementById("adminPanel").style.display = "block";
-    }
+  const email = user.email.toLowerCase();
+  const role = localStorage.getItem("session_role") || "estudiante";
 
-    // --- 1. LÓGICA DE BLOQUEO (REVISIÓN DE STATUS) ---
-    async function checkSecurityStatus() {
-      const docSnap = await getDoc(doc(db, "users_config", userEmail));
-      if(docSnap.exists()){
-        const data = docSnap.data();
-        const statusEl = document.getElementById("uStatusPill");
-        
-        if(data.status === "bloqueado") {
-          statusEl.textContent = "INSOLVENTE ⛔";
-          statusEl.className = "status-pill status-bad";
-          if(userRole !== "administrador") {
-             alert("⛔ ACCESO SUSPENDIDO: Tu cuenta presenta insolvencia. Contacta a administración.");
-             handleLogout();
-          }
-        } else {
-          statusEl.textContent = "SOLVENTE ✅";
-          statusEl.className = "status-pill status-ok";
+  $("uNameDisplay").textContent = email.split("@")[0].toUpperCase();
+  $("uRoleDisplay").textContent = "ROL: " + role.toUpperCase();
+
+  if(role === "administrador" || role === "maestro"){
+    $("adminPanel").style.display = "block";
+  }
+
+  /* 🔥 STATUS VISUAL EN TU CARD */
+  try {
+    const snap = await getDoc(doc(db, "users_config", email));
+    const pill = $("uStatusPill");
+
+    if(snap.exists()){
+      const data = snap.data();
+
+      if(data.status === "bloqueado"){
+        pill.textContent = "INSOLVENTE ⛔";
+        pill.className = "status-pill status-bad";
+
+        if(role !== "administrador"){
+          alert("Cuenta bloqueada");
+          logout();
         }
+      } else {
+        pill.textContent = "SOLVENTE ✅";
+        pill.className = "status-pill status-ok";
       }
+
+    } else {
+      pill.textContent = "ACTIVO";
+      pill.className = "status-pill status-ok";
     }
-    checkSecurityStatus();
 
-    // --- 2. GESTIÓN DE ANUNCIOS (REALTIME) ---
-    const postCol = collection(db, "dashboard_posts");
-    
-    document.getElementById("btnPostSave").onclick = async () => {
-      const t = document.getElementById("pTitle").value;
-      const b = document.getElementById("pBody").value;
-      const i = document.getElementById("pImg").value;
-      if(!t || !b) return alert("Completa el anuncio");
+  } catch(e){
+    console.error("Error estado:", e);
+  }
 
-      await addDoc(postCol, { title: t, body: b, imageUrl: i, createdAt: serverTimestamp(), author: userEmail });
-      closeModal('modalPost');
-    };
+});
 
-    onSnapshot(query(postCol, orderBy("createdAt", "desc")), (snap) => {
-      const feed = document.getElementById("postFeed");
-      feed.innerHTML = "";
-      snap.forEach(d => {
-        const p = d.data();
-        feed.innerHTML += `
-          <article class="post-card">
-            <div style="display:flex; justify-content:space-between; align-items:start;">
-              <strong style="font-size:18px; color:var(--azul-oscuro);">${p.title}</strong>
-              ${userRole === 'administrador' ? `<button onclick="deletePost('${d.id}')" style="border:0; background:none; cursor:pointer;">🗑️</button>` : ''}
-            </div>
-            <p style="font-size:14px; color:var(--muted); line-height:1.6; margin:15px 0;">${p.body}</p>
-            ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-img">` : ''}
-          </article>
-        `;
-      });
+/* =========================
+   📰 POSTS (DISEÑO REAL)
+========================= */
+const postCol = collection(db, "dashboard_posts");
+
+onSnapshot(query(postCol, orderBy("createdAt", "desc")), (snap) => {
+
+  const feed = $("postFeed");
+  feed.innerHTML = "";
+
+  snap.forEach(docSnap => {
+    const p = docSnap.data();
+
+    feed.innerHTML += `
+      <article class="post-card">
+        <div style="display:flex; justify-content:space-between; align-items:start;">
+          <strong style="font-size:18px; color:var(--azul-oscuro);">${p.title}</strong>
+        </div>
+
+        <p style="font-size:14px; color:var(--muted); margin:15px 0;">
+          ${p.body}
+        </p>
+
+        ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-img">` : ''}
+      </article>
+    `;
+  });
+
+});
+
+/* =========================
+   ➕ CREAR POST (MODAL)
+========================= */
+$("btnPostSave").onclick = async () => {
+
+  const title = $("pTitle").value;
+  const body = $("pBody").value;
+  const img = $("pImg").value;
+
+  if(!title || !body){
+    alert("Completa el anuncio");
+    return;
+  }
+
+  await addDoc(postCol,{
+    title,
+    body,
+    imageUrl: img,
+    createdAt: serverTimestamp()
+  });
+
+  closeModal("modalPost");
+};
+
+/* =========================
+   👤 ADMIN PANEL
+========================= */
+$("btnMasterSave").onclick = async () => {
+
+  const email = $("adminEmail").value.toLowerCase();
+  const pass = $("adminPass").value;
+  const role = $("adminRole").value;
+  const status = $("adminStatus").value;
+
+  try{
+    if(pass){
+      await createUserWithEmailAndPassword(auth, email, pass);
+    }
+
+    await setDoc(doc(db,"users_config",email),{
+      email,
+      role,
+      status
     });
 
-    window.deletePost = async (id) => { if(confirm("¿Borrar aviso permanentemente?")) await deleteDoc(doc(db, "dashboard_posts", id)); };
+    alert("Usuario guardado");
+    closeModal("modalUser");
 
-    // --- 3. GESTIÓN DE USUARIOS (CREAR Y BLOQUEAR) ---
-    document.getElementById("btnMasterSave").onclick = async () => {
-      const e = document.getElementById("adminEmail").value.toLowerCase();
-      const p = document.getElementById("adminPass").value;
-      const r = document.getElementById("adminRole").value;
-      const s = document.getElementById("adminStatus").value;
+  }catch(e){
+    alert(e.message);
+  }
+};
 
-      try {
-        if(p) await createUserWithEmailAndPassword(auth, e, p);
-        await setDoc(doc(db, "users_config", e), { email: e, role: r, status: s, lastModified: new Date().toISOString() });
-        alert("Usuario actualizado en la base de datos.");
-        closeModal('modalUser');
-      } catch(err) { alert("Error: " + err.message); }
-    };
+/* =========================
+   🔐 CAMBIO DE PASS
+========================= */
+$("btnUpdatePass").onclick = async () => {
 
-    // --- 4. CAMBIO DE PASSWORD SEGURO ---
-    document.getElementById("btnUpdatePass").onclick = async () => {
-      const user = auth.currentUser;
-      const op = document.getElementById("oldP").value;
-      const np = document.getElementById("newP").value;
-      
-      try {
-        const cred = EmailAuthProvider.credential(user.email, op);
-        await reauthenticateWithCredential(user, cred);
-        await updatePassword(user, np);
-        alert("¡Seguridad actualizada con éxito!");
-        closeModal('modalPass');
-      } catch(e) { alert("Error: Verifica tu contraseña actual."); }
-    };
+  const user = auth.currentUser;
+  const oldPass = $("oldP").value;
+  const newPass = $("newP").value;
 
-    // --- 5. CARGA DE CURSOS DESDE JSON ---
-    async function initCourses() {
-      try {
-        const r = await fetch("courses.json?v=" + Date.now());
-        const d = await r.json();
-        const container = document.getElementById("courseContainer");
-        container.innerHTML = "";
+  try{
+    const cred = EmailAuthProvider.credential(user.email, oldPass);
+    await reauthenticateWithCredential(user, cred);
+    await updatePassword(user, newPass);
 
-        const visible = (userRole === 'administrador') 
-          ? d.courses 
-          : d.courses.filter(c => (c.allowedEmails || []).map(x => x.toLowerCase()).includes(userEmail));
+    alert("Contraseña actualizada");
+    closeModal("modalPass");
 
-        visible.forEach(c => {
-          container.innerHTML += `
-            <a href="${c.page}" class="course-card">
-              <span style="font-size:20px;">📘</span>
-              <span>${c.name}</span>
-            </a>`;
-        });
-      } catch(e) { console.error("Error cargando cursos."); }
-    }
-    initCourses();
+  }catch(e){
+    alert("Error contraseña");
+  }
+};
 
-    // --- SALIDA ---
-    const handleLogout = () => {
-      localStorage.clear();
-      signOut(auth).then(() => window.location.href = "index.html");
-    };
-    document.getElementById("btnLogout").onclick = handleLogout;
+/* =========================
+   🚪 LOGOUT
+========================= */
+function logout(){
+  localStorage.clear();
+  signOut(auth).then(()=>{
+    window.location.href="index.html";
+  });
+}
 
-  </script>
-</body>
-</html>
+$("btnLogout").onclick = logout;
+
+</script>
