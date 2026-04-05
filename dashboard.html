@@ -4,299 +4,559 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <title>Dashboard CECNIC - Sistema Integral</title>
-  <meta name="color-scheme" content="light">
+  <title>Sistema Maestro CECNIC - Control Total</title>
+  
   <style>
-    :root{
-      --azul:#1d4ed8;
-      --azul-oscuro:#0b1f4d;
-      --azul-medio:#2563eb;
-      --azul-suave:#dbeafe;
-      --azul-claro:#eff6ff;
-      --blanco:#ffffff;
-      --texto:#0f172a;
-      --muted:#60708e;
-      --borde:#bfdbfe;
-      --shadow:0 24px 70px rgba(11,31,77,.14);
-      --ok:#16a34a;
-      --bad:#dc2626;
-      --focus:rgba(37,99,235,.18);
-      --radius:28px;
+    :root {
+      --azul: #1d4ed8;
+      --azul-oscuro: #0b1f4d;
+      --azul-medio: #2563eb;
+      --azul-suave: #dbeafe;
+      --azul-claro: #eff6ff;
+      --blanco: #ffffff;
+      --texto: #0f172a;
+      --muted: #64748b;
+      --borde: #e2e8f0;
+      --shadow: 0 20px 50px rgba(11, 31, 77, 0.12);
+      --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+      --ok: #10b981;
+      --bad: #ef4444;
+      --warning: #f59e0b;
+      --focus: rgba(37, 99, 235, 0.2);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
     }
 
-    *{box-sizing:border-box}
-    html,body{min-height:100%; margin:0; font-family: ui-sans-serif, system-ui, sans-serif;}
-
-    body{
-      background: radial-gradient(circle at top left, rgba(59,130,246,.16), transparent 25%),
-                  linear-gradient(145deg, #eff6ff 0%, #dbeafe 45%, #eef4ff 100%);
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
       color: var(--texto);
-      overflow-x: hidden;
+      min-height: 100vh;
+      background: 
+        radial-gradient(at 0% 0%, rgba(29, 78, 216, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(29, 78, 216, 0.1) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%);
     }
 
-    .bg-dots{
-      position:fixed; inset:0; pointer-events:none; opacity:.18;
-      background-image: radial-gradient(circle, rgba(29,78,216,.35) 1.1px, transparent 1.1px);
-      background-size: 32px 32px; z-index:0;
+    .bg-dots {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.3;
+      z-index: -1;
     }
 
-    .layout{ position:relative; z-index:1; display:grid; gap:18px; padding:16px; }
+    /* --- CONTENEDOR PRINCIPAL --- */
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      gap: 20px;
+    }
 
-    .glass{ background: rgba(255,255,255,.78); backdrop-filter: blur(12px); border:1px solid rgba(255,255,255,.65); box-shadow: var(--shadow); border-radius: 30px; }
+    /* --- GLASSMORPHISM CORE --- */
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+    }
 
-    /* HERO */
-    .hero{ padding:28px; background: linear-gradient(135deg, #0b1f4d 0%, #1d4ed8 100%); color:#fff; position:relative; overflow:hidden; }
-    .hero-grid{ display:grid; grid-template-columns: 1.1fr 0.9fr; gap:22px; align-items:center; position:relative; z-index:2; }
-    .hero h1{ font-size: clamp(30px, 5vw, 50px); margin:0; font-weight:900; line-height:1; }
-    .hero-side{ background: rgba(255,255,255,0.1); border-radius: 20px; padding:20px; border: 1px solid rgba(255,255,255,0.2); }
-    .hero-box{ background:rgba(255,255,255,.08); padding:12px; border-radius:15px; border:1px solid rgba(255,255,255,.1); }
+    /* --- HERO DÁMICO --- */
+    .main-hero {
+      padding: 40px;
+      background: linear-gradient(135deg, var(--azul-oscuro) 0%, #1e40af 100%);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
 
-    /* SECTIONS */
-    .content{ display:grid; grid-template-columns: 320px 1fr; gap:18px; }
-    .panel-head{ padding:20px; border-bottom: 1px solid var(--borde); }
-    .who{ display:flex; align-items:center; justify-content:space-between; background:#fff; padding:12px; border-radius:20px; margin-top:10px; border:1px solid var(--borde); }
+    .hero-content h1 {
+      font-size: 48px;
+      font-weight: 900;
+      margin: 0;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
 
-    /* BUTTONS */
-    .btn{ border:0; cursor:pointer; padding:12px 18px; border-radius:15px; font-weight:700; transition: .2s; }
-    .btn.primary{ background: var(--azul); color:#fff; }
-    .btn.ghost{ background:#fff; color: var(--azul-oscuro); border:1px solid var(--borde); }
-    .btn.danger{ background:#fff1f2; color:#b42318; border:1px solid #fecdd3; }
-    .btn:hover{ transform: translateY(-2px); filter: brightness(1.1); }
+    .hero-content p {
+      font-size: 18px;
+      opacity: 0.9;
+      margin: 15px 0 0;
+    }
 
-    /* CARDS & GRID */
-    .gridCards{ display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:18px; margin-top:20px; }
-    .cardPost{ background:#fff; padding:15px; border-radius:22px; border:1px solid var(--borde); }
-    .postImg{ width:100%; border-radius:15px; margin-top:10px; object-fit:cover; max-height:250px; }
+    .user-badge-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      min-width: 280px;
+    }
 
-    /* MODALS */
-    .modal{ position:fixed; inset:0; background:rgba(0,0,0,0.4); backdrop-filter:blur(5px); display:none; place-items:center; z-index:100; padding:20px; }
-    .modal.show{ display:grid; }
-    .paper{ background:#fff; width:100%; max-width:500px; border-radius:25px; overflow:hidden; box-shadow: var(--shadow); }
-    .paperTop{ padding:15px 20px; background: var(--azul-claro); display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--borde); }
-    .paperBody{ padding:20px; }
-    .input, .area{ width:100%; padding:12px; border-radius:12px; border:1px solid var(--borde); margin-bottom:10px; outline:none; }
+    /* --- GRID DEL DASHBOARD --- */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+    }
 
-    /* UTILS */
-    .badge{ background: var(--bad); color:white; padding:2px 8px; border-radius:10px; font-size:11px; }
+    /* --- SIDEBAR --- */
+    .sidebar { padding: 25px; }
+    
+    .nav-group { margin-bottom: 30px; }
+    .nav-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 15px;
+      display: block;
+    }
 
-    @media (max-width: 900px) { .content, .hero-grid { grid-template-columns: 1fr; } }
+    .course-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: white;
+      border: 1px solid var(--borde);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--texto);
+      font-weight: 600;
+      margin-bottom: 10px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .course-card:hover {
+      transform: translateX(8px);
+      border-color: var(--azul);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+
+    /* --- MAIN AREA --- */
+    .feed-container { padding: 30px; }
+
+    .feed-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 30px;
+    }
+
+    .feed-header h2 { font-size: 32px; font-weight: 800; margin: 0; letter-spacing: -1px; }
+
+    /* --- POSTS CARDS --- */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 25px;
+    }
+
+    .post-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--borde);
+      transition: transform 0.3s ease;
+    }
+
+    .post-card:hover { transform: translateY(-8px); }
+
+    .post-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      margin-bottom: 15px;
+      background: var(--azul-claro);
+    }
+
+    /* --- BOTONES --- */
+    .btn {
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary { background: var(--azul); color: white; }
+    .btn-primary:hover { background: var(--azul-medio); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3); }
+    
+    .btn-ghost { background: white; color: var(--azul-oscuro); border: 1px solid var(--borde); }
+    .btn-danger { background: #fee2e2; color: #dc2626; }
+
+    /* --- MODALES --- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px);
+      display: none;
+      place-items: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .modal-overlay.active { display: grid; }
+
+    .modal-content {
+      background: white;
+      width: 100%;
+      max-width: 600px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      animation: modalSlide 0.4s ease;
+    }
+
+    @keyframes modalSlide {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 25px;
+      background: var(--azul-claro);
+      border-bottom: 1px solid var(--borde);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body { padding: 30px; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-weight: 700; font-size: 13px; margin-bottom: 8px; color: var(--muted); }
+
+    .input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--borde);
+      outline: none;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    .input:focus { border-color: var(--azul); box-shadow: 0 0 0 4px var(--focus); }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 1024px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .main-hero { flex-direction: column; text-align: center; gap: 30px; }
+    }
+
+    /* --- ESTADOS --- */
+    .status-pill {
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .status-ok { background: #d1fae5; color: #065f46; }
+    .status-bad { background: #fee2e2; color: #991b1b; }
+
   </style>
 </head>
 <body>
   <div class="bg-dots"></div>
 
-  <div class="layout">
-    <section class="hero glass">
-      <div class="hero-grid">
-        <div>
-          <p style="letter-spacing:4px; font-size:12px;">CECNIC ONLINE</p>
-          <h1>DASHBOARD<br>ADMINISTRATIVO</h1>
-          <p>Gestión de servicios, usuarios y avisos en tiempo real.</p>
-        </div>
-        <div class="hero-side">
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div class="hero-box"><small>Usuario</small><br><strong id="nameHero">—</strong></div>
-            <div class="hero-box"><small>Rol</small><br><strong id="roleHero">—</strong></div>
+  <div class="app-container">
+    
+    <header class="main-hero glass">
+      <div class="hero-content">
+        <span style="letter-spacing: 4px; font-weight: 800; font-size: 12px; opacity: 0.8;">CECNIC PLATFORM v4.0</span>
+        <h1>Dashboard Central</h1>
+        <p>Administra tus cursos, pagos e información académica.</p>
+      </div>
+
+      <div class="user-badge-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+          <div>
+            <div id="uNameDisplay" style="font-size: 20px; font-weight: 800;">Cargando...</div>
+            <div id="uRoleDisplay" style="font-size: 12px; opacity: 0.7; font-weight: 700;">ROL: —</div>
           </div>
-          <button class="btn ghost" style="width:100%; margin-top:15px;" onclick="document.getElementById('modalPass').classList.add('show')">Cambiar Contraseña</button>
+          <div id="uStatusPill" class="status-pill status-ok">Verificando</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <button class="btn btn-ghost" style="padding: 8px; font-size: 12px; width: 100%;" onclick="openModal('modalPass')">🔑 Seguridad</button>
+          <button class="btn btn-danger" style="padding: 8px; font-size: 12px; width: 100%;" id="btnLogout">🚪 Salir</button>
         </div>
       </div>
-    </section>
+    </header>
 
-    <section class="content">
-      <aside class="glass">
-        <div class="panel-head">
-          <h2 style="margin:0; font-size:20px;">Menú Principal</h2>
-          <div class="who">
-            <span id="nameUser" style="font-weight:700; font-size:14px;">—</span>
-            <button class="btn danger" id="btnLogout" style="padding:5px 10px; font-size:12px;">Salir</button>
-          </div>
+    <div class="dashboard-grid">
+      
+      <aside class="sidebar glass">
+        <div class="nav-group">
+          <span class="nav-title">Navegación Académica</span>
+          <div id="courseContainer">
+            </div>
         </div>
-        <div style="padding:20px;">
-          <h4 style="margin:0 0 10px;">Mis Cursos</h4>
-          <div id="courseList" style="display:grid; gap:8px;"></div>
-          
-          <hr style="border:0; border-top:1px solid var(--borde); margin:20px 0;">
-          
-          <button class="btn ghost" style="width:100%; text-align:left; display:flex; justify-content:space-between;" onclick="alert('Abriendo bandeja de solicitudes...')">
-            📥 Inbox Solicitudes <span class="badge" id="inboxCount">0</span>
+
+        <div class="nav-group">
+          <span class="nav-title">Comunicación</span>
+          <button class="btn btn-ghost" style="width: 100%; justify-content: space-between;">
+            Inbox Solicitudes <span class="status-pill status-bad" id="solCount">0</span>
           </button>
+        </div>
+
+        <div id="adminPanel" style="display: none; border-top: 2px dashed var(--borde); padding-top: 20px;">
+          <span class="nav-title">Herramientas Master</span>
+          <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="openModal('modalUser')">👤 Gestionar Usuario</button>
+          <button class="btn btn-ghost" style="width: 100%;" onclick="openModal('modalPost')">📝 Crear Anuncio</button>
         </div>
       </aside>
 
-      <main class="glass" style="padding:25px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
-          <h3 style="margin:0; font-size:32px; font-weight:900;">Avisos Recientes</h3>
-          <div id="adminTools" style="display:none; gap:10px;">
-            <button class="btn ghost" onclick="document.getElementById('modalUser').classList.add('show')">+ Usuario</button>
-            <button class="btn primary" onclick="document.getElementById('modalPost').classList.add('show')">+ Nuevo Aviso</button>
+      <main class="feed-container glass">
+        <div class="feed-header">
+          <div>
+            <h2>Muro de Avisos</h2>
+            <p style="color: var(--muted); margin: 5px 0 0;">Información oficial y novedades del centro.</p>
           </div>
+          <div class="status-pill status-ok">Firebase Realtime: Conectado</div>
         </div>
 
-        <div class="gridCards" id="dashPosts"></div>
+        <div class="posts-grid" id="postFeed">
+          </div>
       </main>
-    </section>
-  </div>
 
-  <div class="modal" id="modalPost">
-    <div class="paper">
-      <div class="paperTop"><strong>Crear Aviso</strong><button class="btn" onclick="this.closest('.modal').classList.remove('show')">X</button></div>
-      <div class="paperBody">
-        <input class="input" id="postTitle" placeholder="Título">
-        <textarea class="area" id="postBody" placeholder="Mensaje..." rows="4"></textarea>
-        <input class="input" id="postImg" placeholder="URL de la imagen">
-        <button class="btn primary" style="width:100%;" id="btnSavePost">Publicar en Dashboard</button>
-      </div>
     </div>
   </div>
 
-  <div class="modal" id="modalUser">
-    <div class="paper">
-      <div class="paperTop"><strong>Nuevo Usuario</strong><button class="btn" onclick="this.closest('.modal').classList.remove('show')">X</button></div>
-      <div class="paperBody">
-        <input class="input" id="regEmail" placeholder="Correo electrónico">
-        <input class="input" id="regPass" type="password" placeholder="Contraseña temporal">
-        <select class="input" id="regRole">
-          <option value="estudiante">Estudiante</option>
-          <option value="maestro">Maestro</option>
-          <option value="administrador">Administrador</option>
-        </select>
-        <button class="btn primary" style="width:100%;" id="btnCreateUser">Registrar en Firebase</button>
+  <div class="modal-overlay" id="modalUser">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong style="font-size: 20px;">Control de Acceso Maestro</strong>
+        <button class="btn" onclick="closeModal('modalUser')">✕</button>
       </div>
-    </div>
-  </div>
-
-  <div class="modal" id="modalPass">
-    <div class="paper">
-      <div class="paperTop"><strong>Seguridad</strong><button class="btn" onclick="this.closest('.modal').classList.remove('show')">X</button></div>
-      <div class="paperBody">
-        <input class="input" id="oldPass" type="password" placeholder="Contraseña actual">
-        <input class="input" id="newPass" type="password" placeholder="Nueva contraseña">
-        <button class="btn primary" style="width:100%;" id="btnUpdatePass">Actualizar Contraseña</button>
-      </div>
-    </div>
-  </div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc, where } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-  import { getAuth, createUserWithEmailAndPassword, updatePassword, reauthenticateWithCredential, EmailAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCygD9ISTn-mqAt5WacS1aIAVb1TunoG00",
-    authDomain: "plataformacecnic.firebaseapp.com",
-    projectId: "plataformacecnic",
-    storageBucket: "plataformacecnic.firebasestorage.app",
-    messagingSenderId: "1053875195363",
-    appId: "1:1053875195363:web:57be5f3ff586466ea7a4d6"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-
-  const email = (localStorage.getItem("session_email") || "").toLowerCase();
-  const role = localStorage.getItem("session_role") || "estudiante";
-
-  // PROTECCIÓN DE RUTA
-  if(!email) window.location.href = "index.html";
-
-  // UI INITIAL LOAD
-  document.getElementById("nameHero").textContent = email.split('@')[0];
-  document.getElementById("roleHero").textContent = role.toUpperCase();
-  document.getElementById("nameUser").textContent = email;
-  
-  if(role === "administrador" || role === "maestro") {
-    document.getElementById("adminTools").style.display = "flex";
-  }
-
-  // --- GESTIÓN DE AVISOS (FIREBASE) ---
-  const postCol = collection(db, "dashboard_posts");
-  
-  document.getElementById("btnSavePost").onclick = async () => {
-    const t = document.getElementById("postTitle").value;
-    const b = document.getElementById("postBody").value;
-    const i = document.getElementById("postImg").value;
-    if(!t || !b) return alert("Completa los campos");
-    
-    await addDoc(postCol, { title: t, body: b, imageUrl: i, createdAt: serverTimestamp() });
-    document.getElementById("modalPost").classList.remove("show");
-  };
-
-  onSnapshot(query(postCol, orderBy("createdAt", "desc")), (snap) => {
-    const wrap = document.getElementById("dashPosts");
-    wrap.innerHTML = "";
-    snap.forEach(d => {
-      const p = d.data();
-      wrap.innerHTML += `
-        <div class="cardPost">
-          <div style="display:flex; justify-content:space-between;">
-            <strong style="color:var(--azul-oscuro); font-size:18px;">${p.title}</strong>
-            ${role === 'administrador' ? `<button onclick="window.delPost('${d.id}')" style="border:0; background:none; cursor:pointer;">🗑️</button>` : ''}
-          </div>
-          <p style="color:var(--muted); font-size:14px; margin:10px 0;">${p.body}</p>
-          ${p.imageUrl ? `<img src="${p.imageUrl}" class="postImg">` : ''}
+      <div class="modal-body">
+        <div class="form-group">
+          <label>EMAIL DEL ESTUDIANTE</label>
+          <input class="input" id="adminEmail" placeholder="correo@cecnic.com">
         </div>
-      `;
-    });
-  });
+        <div class="form-group">
+          <label>CONTRASEÑA (Para cuentas nuevas)</label>
+          <input class="input" id="adminPass" type="password" placeholder="Mínimo 6 caracteres">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="form-group">
+            <label>ASIGNAR ROL</label>
+            <select class="input" id="adminRole">
+              <option value="estudiante">Estudiante</option>
+              <option value="maestro">Maestro</option>
+              <option value="administrador">Administrador</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>ESTADO FINANCIERO</label>
+            <select class="input" id="adminStatus">
+              <option value="activo">Solvente (Activo)</option>
+              <option value="bloqueado">Insolvente (Bloqueado)</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="btnMasterSave">GUARDAR CAMBIOS EN FIREBASE</button>
+      </div>
+    </div>
+  </div>
 
-  window.delPost = async (id) => { if(confirm("¿Borrar aviso?")) await deleteDoc(doc(db, "dashboard_posts", id)); };
+  <div class="modal-overlay" id="modalPost">
+    <div class="modal-content">
+      <div class="modal-header">
+        <strong style="font-size: 20px;">Publicar Anuncio</strong>
+        <button class="btn" onclick="closeModal('modalPost')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label>TÍTULO</label><input class="input" id="pTitle"></div>
+        <div class="form-group"><label>MENSAJE</label><textarea class="input" id="pBody" rows="4" style="resize:none;"></textarea></div>
+        <div class="form-group"><label>URL DE IMAGEN (Directa)</label><input class="input" id="pImg" placeholder="https://..."></div>
+        <button class="btn btn-primary" style="width: 100%;" id="btnPostSave">PUBLICAR AHORA</button>
+      </div>
+    </div>
+  </div>
 
-  // --- GESTIÓN DE USUARIOS ---
-  document.getElementById("btnCreateUser").onclick = async () => {
-    const e = document.getElementById("regEmail").value;
-    const p = document.getElementById("regPass").value;
-    const r = document.getElementById("regRole").value;
+  <div class="modal-overlay" id="modalPass">
+    <div class="modal-content">
+      <div class="modal-header"><strong>Seguridad</strong><button class="btn" onclick="closeModal('modalPass')">✕</button></div>
+      <div class="modal-body">
+        <div class="form-group"><label>PASS ACTUAL</label><input class="input" id="oldP" type="password"></div>
+        <div class="form-group"><label>NUEVA PASS</label><input class="input" id="newP" type="password"></div>
+        <button class="btn btn-primary" style="width: 100%;" id="btnUpdatePass">CAMBIAR CONTRASEÑA</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, setDoc, deleteDoc, where } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { getAuth, createUserWithEmailAndPassword, updatePassword, reauthenticateWithCredential, EmailAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCygD9ISTn-mqAt5WacS1aIAVb1TunoG00",
+      authDomain: "plataformacecnic.firebaseapp.com",
+      projectId: "plataformacecnic",
+      storageBucket: "plataformacecnic.firebasestorage.app",
+      messagingSenderId: "1053875195363",
+      appId: "1:1053875195363:web:57be5f3ff586466ea7a4d6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // --- VARIABLES DE SESIÓN ---
+    const userEmail = (localStorage.getItem("session_email") || "").toLowerCase();
+    const userRole = localStorage.getItem("session_role") || "estudiante";
+
+    if(!userEmail) window.location.href = "index.html";
+
+    // --- FUNCIONES DE UI ---
+    window.openModal = (id) => document.getElementById(id).classList.add('active');
+    window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+
+    document.getElementById("uNameDisplay").textContent = userEmail.split('@')[0].toUpperCase();
+    document.getElementById("uRoleDisplay").textContent = "ROL: " + userRole.toUpperCase();
+
+    if(userRole === "administrador" || userRole === "maestro") {
+      document.getElementById("adminPanel").style.display = "block";
+    }
+
+    // --- 1. LÓGICA DE BLOQUEO (REVISIÓN DE STATUS) ---
+    async function checkSecurityStatus() {
+      const docSnap = await getDoc(doc(db, "users_config", userEmail));
+      if(docSnap.exists()){
+        const data = docSnap.data();
+        const statusEl = document.getElementById("uStatusPill");
+        
+        if(data.status === "bloqueado") {
+          statusEl.textContent = "INSOLVENTE ⛔";
+          statusEl.className = "status-pill status-bad";
+          if(userRole !== "administrador") {
+             alert("⛔ ACCESO SUSPENDIDO: Tu cuenta presenta insolvencia. Contacta a administración.");
+             handleLogout();
+          }
+        } else {
+          statusEl.textContent = "SOLVENTE ✅";
+          statusEl.className = "status-pill status-ok";
+        }
+      }
+    }
+    checkSecurityStatus();
+
+    // --- 2. GESTIÓN DE ANUNCIOS (REALTIME) ---
+    const postCol = collection(db, "dashboard_posts");
     
-    try {
-      await createUserWithEmailAndPassword(auth, e, p);
-      await addDoc(collection(db, "users_roles"), { email: e.toLowerCase(), role: r });
-      alert("Usuario creado en Firebase!");
-      document.getElementById("modalUser").classList.remove("show");
-    } catch(err) { alert("Error: " + err.message); }
-  };
+    document.getElementById("btnPostSave").onclick = async () => {
+      const t = document.getElementById("pTitle").value;
+      const b = document.getElementById("pBody").value;
+      const i = document.getElementById("pImg").value;
+      if(!t || !b) return alert("Completa el anuncio");
 
-  // --- CAMBIO DE CONTRASEÑA ---
-  document.getElementById("btnUpdatePass").onclick = async () => {
-    const user = auth.currentUser;
-    const oldP = document.getElementById("oldPass").value;
-    const newP = document.getElementById("newPass").value;
-    const credential = EmailAuthProvider.credential(user.email, oldP);
+      await addDoc(postCol, { title: t, body: b, imageUrl: i, createdAt: serverTimestamp(), author: userEmail });
+      closeModal('modalPost');
+    };
 
-    try {
-      await reauthenticateWithCredential(user, credential);
-      await updatePassword(user, newP);
-      alert("Contraseña actualizada correctamente");
-      document.getElementById("modalPass").classList.remove("show");
-    } catch(err) { alert("Error: Revisa tu contraseña actual"); }
-  };
-
-  // --- SOLICITUDES INBOX ---
-  onSnapshot(query(collection(db, "solicitudes"), where("status", "==", "pendiente")), (snap) => {
-    document.getElementById("inboxCount").textContent = snap.size;
-  });
-
-  // --- CURSOS FILTRADOS ---
-  async function loadCourses() {
-    try {
-      const resp = await fetch("courses.json");
-      const data = await resp.json();
-      const wrap = document.getElementById("courseList");
-      const visible = (role === 'administrador') ? data.courses : data.courses.filter(c => c.allowedEmails.includes(email));
-      
-      visible.forEach(c => {
-        wrap.innerHTML += `<a href="${c.page}" class="btn ghost" style="text-decoration:none; font-size:13px;">📘 ${c.name}</a>`;
+    onSnapshot(query(postCol, orderBy("createdAt", "desc")), (snap) => {
+      const feed = document.getElementById("postFeed");
+      feed.innerHTML = "";
+      snap.forEach(d => {
+        const p = d.data();
+        feed.innerHTML += `
+          <article class="post-card">
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+              <strong style="font-size:18px; color:var(--azul-oscuro);">${p.title}</strong>
+              ${userRole === 'administrador' ? `<button onclick="deletePost('${d.id}')" style="border:0; background:none; cursor:pointer;">🗑️</button>` : ''}
+            </div>
+            <p style="font-size:14px; color:var(--muted); line-height:1.6; margin:15px 0;">${p.body}</p>
+            ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-img">` : ''}
+          </article>
+        `;
       });
-    } catch(e) { console.log("Error cargando cursos"); }
-  }
-  loadMyCourses();
+    });
 
-  // LOGOUT
-  document.getElementById("btnLogout").onclick = () => {
-    localStorage.clear();
-    signOut(auth).then(() => window.location.href = "index.html");
-  };
-</script>
+    window.deletePost = async (id) => { if(confirm("¿Borrar aviso permanentemente?")) await deleteDoc(doc(db, "dashboard_posts", id)); };
+
+    // --- 3. GESTIÓN DE USUARIOS (CREAR Y BLOQUEAR) ---
+    document.getElementById("btnMasterSave").onclick = async () => {
+      const e = document.getElementById("adminEmail").value.toLowerCase();
+      const p = document.getElementById("adminPass").value;
+      const r = document.getElementById("adminRole").value;
+      const s = document.getElementById("adminStatus").value;
+
+      try {
+        if(p) await createUserWithEmailAndPassword(auth, e, p);
+        await setDoc(doc(db, "users_config", e), { email: e, role: r, status: s, lastModified: new Date().toISOString() });
+        alert("Usuario actualizado en la base de datos.");
+        closeModal('modalUser');
+      } catch(err) { alert("Error: " + err.message); }
+    };
+
+    // --- 4. CAMBIO DE PASSWORD SEGURO ---
+    document.getElementById("btnUpdatePass").onclick = async () => {
+      const user = auth.currentUser;
+      const op = document.getElementById("oldP").value;
+      const np = document.getElementById("newP").value;
+      
+      try {
+        const cred = EmailAuthProvider.credential(user.email, op);
+        await reauthenticateWithCredential(user, cred);
+        await updatePassword(user, np);
+        alert("¡Seguridad actualizada con éxito!");
+        closeModal('modalPass');
+      } catch(e) { alert("Error: Verifica tu contraseña actual."); }
+    };
+
+    // --- 5. CARGA DE CURSOS DESDE JSON ---
+    async function initCourses() {
+      try {
+        const r = await fetch("courses.json?v=" + Date.now());
+        const d = await r.json();
+        const container = document.getElementById("courseContainer");
+        container.innerHTML = "";
+
+        const visible = (userRole === 'administrador') 
+          ? d.courses 
+          : d.courses.filter(c => (c.allowedEmails || []).map(x => x.toLowerCase()).includes(userEmail));
+
+        visible.forEach(c => {
+          container.innerHTML += `
+            <a href="${c.page}" class="course-card">
+              <span style="font-size:20px;">📘</span>
+              <span>${c.name}</span>
+            </a>`;
+        });
+      } catch(e) { console.error("Error cargando cursos."); }
+    }
+    initCourses();
+
+    // --- SALIDA ---
+    const handleLogout = () => {
+      localStorage.clear();
+      signOut(auth).then(() => window.location.href = "index.html");
+    };
+    document.getElementById("btnLogout").onclick = handleLogout;
+
+  </script>
 </body>
 </html>
