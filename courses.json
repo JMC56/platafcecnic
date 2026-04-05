@@ -1,8 +1,13 @@
 {
-  "users": [
-    { "email": "admin@cecnic.com", "pass": "JAMES2014$", "role": "administrador", "name": "Administrador" },
-    { "email": "james@cecnic.com", "pass": "JAMES2014$", "role": "administrador", "name": "Profe 1" },
-    { "email": "alumno1@cecnic.com", "pass": "1234", "role": "estudiante", "name": "Alumno 1" },
-    { "email": "alumno2@cecnic.com", "pass": "1234", "role": "estudiante", "name": "Alumno 2" }
+  "courses": [
+    {
+      "id": "ingleskids",
+      "name": "Ingles Kids",
+      "page": "cursos/ingles-kids.html",
+      "allowedEmails": [
+        "profe1@cecnic.com",
+        "alumno1@cecnic.com"
+      ]
+    }
   ]
 }
